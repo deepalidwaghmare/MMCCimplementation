@@ -20,7 +20,7 @@ class QueueSystem:
         self.time_next_event = numpy.zeros(self.C_servers + 1)
         self.time_next_event[0] = self.sim_time + self.expon(self.mean_interarrival)  # determine next arrival
         for i in range(1, self.C_servers + 1):
-            self.time_next_event[i] = math.inf;
+            self.time_next_event[i] = math.inf
         self.server_idle = 0  # determine next departure.
         self.server_utilization = numpy.zeros(self.C_servers)
         self.total_server_utilization = 0
