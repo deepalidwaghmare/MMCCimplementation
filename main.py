@@ -7,7 +7,7 @@ loop=int(0)
 
 class QueueSystem:
     def __init__(self, totalProcess, mean_interArrival_Time, mean_ServiceTime):
-        self.mean_interarrival = mean_interArrival_Time  # Mean Interarrival Time (1/λ)
+        self.mean_interarrival = mean_interArrival_Time  # Mean Inter-arrival Time (1/λ)
         self.mean_service = mean_ServiceTime  # Mean Service Time (1/µ) (Note : It should be considered that Mean Service Time < Mean Interarrival Time)
         self.sim_time = 0.0
         self.C_servers = 16
