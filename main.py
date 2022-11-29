@@ -7,8 +7,8 @@ loop=int(0)
 
 class QueueSystem:
     def __init__(self, totalProcess, mean_interArrival_Time, mean_ServiceTime):
-        self.mean_interarrival = mean_interArrival_Time  # Mean Inter-arrival Time (1/λ)
-        self.mean_service = mean_ServiceTime  # Mean Service Time (1/µ) (Note : It should be considered that Mean Service Time < Mean Interarrival Time)
+        self.mean_interarrival = mean_interArrival_Time  # 1/λ
+        self.mean_service = mean_ServiceTime  # 1/µ
         self.sim_time = 0.0
         self.C_servers = 16
         self.num_event = self.C_servers + 1
@@ -18,49 +18,46 @@ class QueueSystem:
         self.server_status = numpy.zeros(self.C_servers + 1)
         self.area_server_status = numpy.zeros(self.C_servers)
         self.time_next_event = numpy.zeros(self.C_servers + 1)
-        self.time_next_event[0] = self.sim_time + self.expon(self.mean_interarrival)  # determine next arrival
+        self.time_next_event[0] = self.sim_time + self.expon(self.mean_interarrival)
         for i in range(1, self.C_servers + 1):
             self.time_next_event[i] = math.inf
-        self.server_idle = 0  # determine next departure.
+        self.server_idle = 0
         self.server_utilization = numpy.zeros(self.C_servers)
         self.total_server_utilization = 0
         self.Total_Loss = 0
 
     def main(self):
-        while (self.num_customers < self.num_customers_required):
+        while self.num_customers < self.num_customers_required:
             self.timing()
             self.update_time_avg_stats()
-            if (self.next_event_type == 0):
+            if self.next_event_type == 0:
                 self.arrive()  ## next event is arrival
             else:
                 self.j = self.next_event_type
-                self.depart()  ## next event is departure
+                self.depart()
         self.report()
 
-    ########################  Define TIMING() function
     def timing(self):
         self.min_time_next_event = math.inf
-        ##Determine the event type of the next event to occur
+
         for i in range(0, self.num_event):
             if (self.time_next_event[i] <= self.min_time_next_event):
                 self.min_time_next_event = self.time_next_event[i]
                 self.next_event_type = i
 
         self.time_last_event = self.sim_time
-        ##advance the simulation clock
+
         self.sim_time = self.time_next_event[self.next_event_type]
 
-    ########################  Define UPDATE_TIME_AVG_STATS() function
     def update_time_avg_stats(self):
         self.time_past = self.sim_time - self.time_last_event
         for i in range(1, self.C_servers + 1):
             self.area_server_status[i - 1] += self.time_past * self.server_status[i]
 
-    #########################   Define ARRIVAL() function
     def arrive(self):
         ix = 0
         self.server_idle = 0
-        ##Schedule next arrival
+
         self.time_next_event[0] = self.sim_time + self.expon(self.mean_interarrival)
 
         while (self.server_idle == 0 and ix <= self.C_servers):
@@ -88,7 +85,7 @@ class QueueSystem:
         #############################################################   Define REPORT() function
 
     def report(self):
-        for i in range(0, self.C_servers):
+        for i in range(0, self.C_servers): #0...16
             self.server_utilization[i] = self.area_server_status[i] / self.sim_time
             self.total_server_utilization += self.area_server_status[i]
         self.total_server_utilization = self.total_server_utilization / (self.sim_time * self.C_servers)
@@ -115,6 +112,5 @@ class QueueSystem:
         print('            Loss Probability =', self.Pc)
 
 
-myObject = QueueSystem(totalProcess=200000, mean_interArrival_Time=5, mean_ServiceTime=100)
+myObject = QueueSystem(totalProcess=200000, mean_interArrival_Time=5 , mean_ServiceTime=100)  #mean_interarrival_time = 0.01..0.1
 myObject.main()
-plt.show(QueueSystem.self)
