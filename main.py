@@ -39,7 +39,7 @@ class QueueSystem:
 
     def timing(self):
         self.min_time_next_event = math.inf
-        ##Determine the event type of the next event to occur
+        ##Determine the event type of the next events to occur
         for i in range(0, self.num_event):
             if (self.time_next_event[i] <= self.min_time_next_event):
                 self.min_time_next_event = self.time_next_event[i]
